@@ -1,0 +1,55 @@
+# Environment variables - NEVER commit these!
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database files (if they contain sensitive data)
+*.db
+*.sqlite
+
+# Cache
+cache/
+*.cache
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ChromaDB - Don't include in repo, will be rebuilt on deploy
+chroma_db/
+
+# Excel databases - these will be committed
+# Database_YARN.xlsx
+# pattern_database.xlsx
+
+# Backups
+backups/
+*.bak
+
+# Conda environments
+crochet_rag/
