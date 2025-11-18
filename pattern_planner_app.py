@@ -45,9 +45,13 @@ def load_data():
 
 @st.cache_resource
 def load_vector_db():
-    client = chromadb.PersistentClient(path="./chroma_db")
-    collection = client.get_collection(name="crochet_patterns")
-    return client, collection
+    try:
+        client = chromadb.PersistentClient(path="./chroma_db")
+        collection = client.get_collection(name="crochet_patterns")
+        return client, collection
+    except:
+        # Vector DB not available in deployment - return None
+        return None, None
 
 def get_current_season():
     """Determine current season based on month"""
