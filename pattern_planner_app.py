@@ -70,7 +70,7 @@ def get_temp_for_location_and_season(location, season):
     return LOCATION_TEMPS.get(location, LOCATION_TEMPS["Custom"])[season]
 
 def get_yarn_temp_range(yarn_row):
-    """Determine comfortable temperature range for yarn based on composition"""
+    """Determine comfortable temperature range for yarn based on composition and thickness"""
     cotton = yarn_row.get('Cotton (%)', 0)
     linen = yarn_row.get('Linen (%)', 0)
     bamboo = yarn_row.get('Bamboo/Viscouse (%)', 0)
@@ -78,18 +78,63 @@ def get_yarn_temp_range(yarn_row):
     wool = yarn_row.get('Wool (%)', 0)
     mohair = yarn_row.get('Mohair/Alpaca (%)', 0)
     
+    # Get yarn thickness for warmth adjustment
+    thickness = str(yarn_row.get('Yarn thikness', '')).lower()
+    thickness_multiplier = 1.0
+    
+    # Thicker yarn = warmer at same composition
+    if 'super bulky' in thickness or 'jumbo' in thickness:
+        thickness_multiplier = 1.4
+    elif 'bulky' in thickness or 'chunky' in thickness:
+        thickness_multiplier = 1.25
+    elif 'worsted' in thickness or 'aran' in thickness:
+        thickness_multiplier = 1.1
+    elif 'dk' in thickness or 'light worsted' in thickness:
+        thickness_multiplier = 1.0
+    elif 'sport' in thickness or 'baby' in thickness:
+        thickness_multiplier = 0.9
+    elif 'fingering' in thickness or 'sock' in thickness:
+        thickness_multiplier = 0.8
+    elif 'lace' in thickness or 'thread' in thickness:
+        thickness_multiplier = 0.7
+    
     # Calculate warmth based on fiber composition
     cool_fiber_pct = cotton + linen + bamboo  # Breathable, cool
     warm_fiber_pct = wool + mohair  # Insulating, warm
     
+    # Base temperature ranges
     if warm_fiber_pct > 50:
-        return {"min": -10, "max": 15, "ideal": 5, "type": "Warm (Wool/Alpaca)"}
+        base_min, base_max, base_ideal = -10, 15, 5
+        fiber_type = "Warm (Wool/Alpaca)"
     elif cool_fiber_pct > 50:
-        return {"min": 15, "max": 35, "ideal": 22, "type": "Cool (Cotton/Linen)"}
+        base_min, base_max, base_ideal = 15, 35, 22
+        fiber_type = "Cool (Cotton/Linen)"
     elif acrylic > 70:
-        return {"min": 5, "max": 20, "ideal": 12, "type": "All-season (Acrylic)"}
+        base_min, base_max, base_ideal = 5, 20, 12
+        fiber_type = "All-season (Acrylic)"
     else:
-        return {"min": 5, "max": 25, "ideal": 15, "type": "Blend"}
+        base_min, base_max, base_ideal = 5, 25, 15
+        fiber_type = "Blend"
+    
+    # Adjust for thickness (thicker = shifts toward cooler temps)
+    # For warm fibers: thicker extends cold tolerance
+    # For cool fibers: thicker reduces heat tolerance
+    if warm_fiber_pct > 50:
+        adjusted_min = base_min - (5 * (thickness_multiplier - 1))
+        adjusted_max = base_max + (3 * (thickness_multiplier - 1))
+    elif cool_fiber_pct > 50:
+        adjusted_min = base_min + (5 * (thickness_multiplier - 1))
+        adjusted_max = base_max - (3 * (thickness_multiplier - 1))
+    else:
+        adjusted_min = base_min
+        adjusted_max = base_max
+    
+    return {
+        "min": int(adjusted_min),
+        "max": int(adjusted_max),
+        "ideal": base_ideal,
+        "type": f"{fiber_type} ({thickness.title() if thickness else 'Standard'})"
+    }
 
 def calculate_temp_match_score(yarn_temp_range, current_temp):
     """Calculate how well yarn matches current temperature (0-30 points)"""
@@ -194,6 +239,13 @@ search_query = st.sidebar.text_input("Search patterns", placeholder="e.g., baby 
 
 # Filters
 st.sidebar.subheader("Filters")
+
+# Favorites filter
+if 'favorites' in st.session_state and st.session_state.favorites:
+    show_favorites_only = st.sidebar.checkbox(f"⭐ Show favorites only ({len(st.session_state.favorites)})")
+else:
+    show_favorites_only = False
+
 difficulties = ["All"] + sorted(unique_patterns['Difficulty Level'].dropna().unique().tolist())
 selected_difficulty = st.sidebar.selectbox("Difficulty", difficulties)
 
@@ -202,6 +254,10 @@ selected_weight = st.sidebar.selectbox("Yarn Weight", weights)
 
 # Apply filters
 filtered_df = unique_patterns.copy()
+
+# Favorites filter
+if show_favorites_only and 'favorites' in st.session_state:
+    filtered_df = filtered_df[filtered_df['Pattern Name'].isin(st.session_state.favorites)]
 
 if selected_difficulty != "All":
     filtered_df = filtered_df[filtered_df['Difficulty Level'] == selected_difficulty]
@@ -231,7 +287,24 @@ selected_pattern = filtered_df[filtered_df['Pattern Name'] == selected_pattern_n
 # MAIN CONTENT - PROJECT PLANNING
 
 # Section 1: Pattern Overview
-st.header(f"📋 {selected_pattern['Pattern Name']}")
+col_header_pattern, col_fav = st.columns([4, 1])
+
+with col_header_pattern:
+    st.header(f"📋 {selected_pattern['Pattern Name']}")
+
+with col_fav:
+    # Simple favorite toggle (stores in session state)
+    if 'favorites' not in st.session_state:
+        st.session_state.favorites = []
+    
+    is_favorite = selected_pattern['Pattern Name'] in st.session_state.favorites
+    
+    if st.button("⭐ Favorite" if not is_favorite else "💫 Favorited", key="fav_btn"):
+        if is_favorite:
+            st.session_state.favorites.remove(selected_pattern['Pattern Name'])
+        else:
+            st.session_state.favorites.append(selected_pattern['Pattern Name'])
+        st.rerun()
 
 col1, col2, col3, col4 = st.columns(4)
 with col1:
@@ -385,7 +458,52 @@ st.markdown(materials)
 
 st.markdown("---")
 
-# Section 6: Pattern PDF
+# Section 6: Project Cost Calculator
+st.subheader("💰 Project Cost Estimator")
+
+col_calc1, col_calc2 = st.columns(2)
+
+with col_calc1:
+    num_balls = st.number_input("Estimated balls/skeins needed", min_value=1, max_value=50, value=3, help="Check pattern for yarn requirements")
+    
+    if yarn_matches_df.iloc[0] is not None:
+        selected_yarn_for_calc = yarn_matches_df.iloc[0]
+        yarn_cost = selected_yarn_for_calc['price'] * num_balls
+        
+        st.markdown(f"**Yarn cost:** €{yarn_cost:.2f}")
+        st.markdown(f"**Hook:** €5-15 (if needed)")
+        st.markdown(f"**Notions:** €2-5")
+        
+        total_min = yarn_cost + 0
+        total_max = yarn_cost + 20
+        
+        st.success(f"**Total Project Cost: €{total_min:.2f} - €{total_max:.2f}**")
+
+with col_calc2:
+    st.markdown("**Shopping List:**")
+    shopping_list = f"""
+    ✅ {selected_pattern['Pattern Name']}
+    
+    Materials:
+    - {num_balls} balls of {yarn_matches_df.iloc[0]['name']}
+    - {selected_pattern['Hook Size (mm)']}mm crochet hook
+    - Scissors
+    - Yarn needle
+    - {selected_pattern['Materials Needed'][:100]}...
+    
+    Estimated Budget: €{total_min:.2f} - €{total_max:.2f}
+    """
+    
+    st.download_button(
+        label="📋 Download Shopping List",
+        data=shopping_list,
+        file_name=f"{selected_pattern['Pattern Name']}_shopping_list.txt",
+        mime="text/plain"
+    )
+
+st.markdown("---")
+
+# Section 7: Pattern PDF
 st.subheader("📄 Pattern PDF")
 
 pdf_filename = selected_pattern['Source File']
