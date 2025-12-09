@@ -15,11 +15,8 @@ sys.path.append('.')
 
 from slice10_yarn_match import calculate_match_score, load_databases, normalize_yarn_weight
 
-# Add back to home button
-col1, col2 = st.columns([6, 1])
-with col2:
-    if st.button("🏠 Home"):
-        st.switch_page("streamlit_app.py")
+# Add navigation
+st.markdown('<a href="/" target="_self" style="text-decoration:none;"><button style="float:right; background:#E8819C; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🏠 Home</button></a>', unsafe_allow_html=True)
 
 # Temperature-based location data (average temps in Celsius)
 LOCATION_TEMPS = {
