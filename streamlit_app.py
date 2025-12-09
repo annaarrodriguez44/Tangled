@@ -233,42 +233,163 @@ with feat_col3:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Quick Access Section
-st.markdown("## 🚀 Quick Access to All Features")
-st.markdown("Click any card to go directly to that feature!")
+# Quick Access Section - Beautiful Feature Cards
+st.markdown("## 🚀 Explore All Features")
+st.markdown("Click any card to start using that tool")
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Row 1: Main features
+# Custom CSS for feature cards
+st.markdown("""
+<style>
+    .feature-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 2px solid #f0f0f0;
+        height: 100%;
+        cursor: pointer;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(232,129,156,0.3);
+        border-color: #E8819C;
+    }
+    .feature-icon-big {
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    .feature-title-big {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+        color: #666;
+        text-align: center;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Row 1: Pattern & Browsing
+st.markdown("### 📚 Pattern Management")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.button("🔍 **Pattern Browser**\n\nBrowse 18+ patterns with advanced filters", use_container_width=True, key="nav_browser"):
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">🔍</div>
+        <div class="feature-title-big">Pattern Browser</div>
+        <div class="feature-desc">Browse 18+ patterns with advanced filters by difficulty, yarn weight, season, project type, and more</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Pattern Browser", use_container_width=True, key="nav_browser", type="primary"):
         st.switch_page("pages/1__Pattern_Browser.py")
-    
-    if st.button("📝 **Project Tracker**\n\nTrack WIP projects with progress", use_container_width=True, key="nav_projects"):
-        st.switch_page("pages/4_📝_Project_Tracker.py")
-    
-    if st.button("💰 **Price Tracker**\n\nMonitor yarn prices & sales", use_container_width=True, key="nav_prices"):
-        st.switch_page("pages/8_💰_Price_Tracker.py")
 
 with col2:
-    if st.button("🧵 **Yarn Inventory**\n\nManage your yarn stash", use_container_width=True, key="nav_inventory"):
-        st.switch_page("pages/3_🧵_Yarn_Inventory.py")
-    
-    if st.button("📸 **Photo Gallery**\n\nShowcase finished projects", use_container_width=True, key="nav_gallery"):
-        st.switch_page("pages/6_📸_Photo_Gallery.py")
-    
-    if st.button("📚 **Add Patterns**\n\nBatch process PDFs with AI", use_container_width=True, key="nav_add"):
-        st.switch_page("pages/9_📚_Add_Patterns.py")
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">⚖️</div>
+        <div class="feature-title-big">Pattern Comparison</div>
+        <div class="feature-desc">Compare 2-3 patterns side-by-side with cost estimates and pros/cons analysis</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Pattern Comparison", use_container_width=True, key="nav_compare", type="primary"):
+        st.switch_page("pages/5_⚖️_Pattern_Comparison.py")
 
 with col3:
-    if st.button("⚖️ **Pattern Comparison**\n\nCompare patterns side-by-side", use_container_width=True, key="nav_compare"):
-        st.switch_page("pages/5_⚖️_Pattern_Comparison.py")
-    
-    if st.button("⭐ **Pattern Notes**\n\nRate patterns & add notes", use_container_width=True, key="nav_notes"):
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">📚</div>
+        <div class="feature-title-big">Add Patterns (AI)</div>
+        <div class="feature-desc">Batch process PDF patterns with AI-powered extraction using Gemini Pro</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Pattern Upload", use_container_width=True, key="nav_add", type="primary"):
+        st.switch_page("pages/9_📚_Add_Patterns.py")
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Row 2: Yarn & Inventory
+st.markdown("### 🧵 Yarn & Inventory Management")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">🧵</div>
+        <div class="feature-title-big">Yarn Inventory</div>
+        <div class="feature-desc">Track your stash with statistics, low stock alerts, and searchable database</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Yarn Inventory", use_container_width=True, key="nav_inventory", type="primary"):
+        st.switch_page("pages/3_🧵_Yarn_Inventory.py")
+
+with col2:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">💰</div>
+        <div class="feature-title-big">Price Tracker</div>
+        <div class="feature-desc">Monitor yarn prices over time with charts and automatic sale detection</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Price Tracker", use_container_width=True, key="nav_prices", type="primary"):
+        st.switch_page("pages/8_💰_Price_Tracker.py")
+
+with col3:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">⭐</div>
+        <div class="feature-title-big">Pattern Notes</div>
+        <div class="feature-desc">Rate patterns, document modifications, and save tips for future projects</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Pattern Notes", use_container_width=True, key="nav_notes", type="primary"):
         st.switch_page("pages/7_⭐_Pattern_Notes.py")
-    
-    if st.button("💬 **Community Forum**\n\nChat & share with others", use_container_width=True, key="nav_forum"):
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Row 3: Project Tracking & Community
+st.markdown("### 📝 Project Tracking & Community")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">📝</div>
+        <div class="feature-title-big">Project Tracker</div>
+        <div class="feature-desc">Track WIP and completed projects with progress percentages and time logging</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Project Tracker", use_container_width=True, key="nav_projects", type="primary"):
+        st.switch_page("pages/4_📝_Project_Tracker.py")
+
+with col2:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">📸</div>
+        <div class="feature-title-big">Photo Gallery</div>
+        <div class="feature-desc">Showcase finished projects with photos, ratings, and searchable tags</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Photo Gallery", use_container_width=True, key="nav_gallery", type="primary"):
+        st.switch_page("pages/6_📸_Photo_Gallery.py")
+
+with col3:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon-big">💬</div>
+        <div class="feature-title-big">Community Forum</div>
+        <div class="feature-desc">Chat with other crocheters, share tips, and discuss patterns in real-time</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Community Forum", use_container_width=True, key="nav_forum", type="primary"):
         st.switch_page("pages/10_💬_Community_Forum.py")
 
 st.markdown("<br><br>", unsafe_allow_html=True)
