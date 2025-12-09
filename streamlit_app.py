@@ -198,41 +198,6 @@ with col4:
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
-# All Features Section
-st.markdown("## 🌟 Complete Feature Set")
-st.markdown("<br>", unsafe_allow_html=True)
-
-feat_col1, feat_col2, feat_col3 = st.columns(3)
-
-with feat_col1:
-    st.markdown("#### 📚 Pattern Management")
-    st.markdown("""
-    - 🔍 **Pattern Browser** - 18+ patterns with filters
-    - ⚖️ **Comparison Tool** - Compare 2-3 patterns
-    - ⭐ **Ratings & Notes** - Document experience
-    - 📚 **Batch Processor** - AI-powered PDF extraction
-    """)
-    
-with feat_col2:
-    st.markdown("#### 🧵 Yarn & Inventory")
-    st.markdown("""
-    - 🧵 **Yarn Inventory** - Track your stash
-    - 💰 **Price Tracker** - Monitor sales & trends
-    - 🌡️ **Smart Matching** - Temperature-aware
-    - 📊 **Statistics** - Analyze your collection
-    """)
-
-with feat_col3:
-    st.markdown("#### 📝 Project & Community")
-    st.markdown("""
-    - 📝 **Project Tracker** - Track WIP & completed
-    - 📸 **Photo Gallery** - Showcase projects
-    - 💬 **Community Forum** - Chat & share tips
-    - 💡 **Tips Archive** - Save modifications
-    """)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
 # Quick Access Section - Beautiful Feature Cards
 st.markdown("## 🚀 Explore All Features")
 st.markdown("Click any card to start using that tool")
