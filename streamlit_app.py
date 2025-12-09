@@ -127,10 +127,10 @@ with col1:
     st.markdown("""
     <div class="feature-box">
         <div class="feature-icon">🔍</div>
-        <div class="feature-title">Browse Patterns</div>
-        <p>Explore our curated collection of crochet patterns. Filter by difficulty, yarn weight, and style.</p>
+        <div class="feature-title">Browse & Compare Patterns</div>
+        <p>18+ patterns with advanced filters. Compare patterns side-by-side and save favorites.</p>
         <br>
-        <a href="/Pattern_Browser" target="_self">
+        <a href="/1__Pattern_Browser" target="_self">
             <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
                 Start Browsing →
             </button>
@@ -141,13 +141,13 @@ with col1:
 with col2:
     st.markdown("""
     <div class="feature-box">
-        <div class="feature-icon">🌡️</div>
-        <div class="feature-title">Smart Yarn Matching</div>
-        <p>Get temperature-aware yarn recommendations based on your location and the season.</p>
+        <div class="feature-icon">🧵</div>
+        <div class="feature-title">Yarn & Project Tracking</div>
+        <p>Track your stash, monitor prices, and manage WIP projects with progress updates.</p>
         <br>
-        <a href="/Pattern_Browser" target="_self">
+        <a href="/3_🧵_Yarn_Inventory" target="_self">
             <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
-                Find Yarns →
+                Track Stash →
             </button>
         </a>
     </div>
@@ -156,13 +156,13 @@ with col2:
 with col3:
     st.markdown("""
     <div class="feature-box">
-        <div class="feature-icon">💰</div>
-        <div class="feature-title">Project Planning</div>
-        <p>Calculate costs, create shopping lists, and save your favorite patterns for later.</p>
+        <div class="feature-icon">📸</div>
+        <div class="feature-title">Gallery & Notes</div>
+        <p>Rate patterns, upload project photos, and document modifications for future reference.</p>
         <br>
-        <a href="/Pattern_Browser" target="_self">
+        <a href="/6_📸_Photo_Gallery" target="_self">
             <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
-                Plan Project →
+                View Gallery →
             </button>
         </a>
     </div>
@@ -198,13 +198,48 @@ with col4:
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 
+# All Features Section
+st.markdown("## 🌟 Complete Feature Set")
+st.markdown("<br>", unsafe_allow_html=True)
+
+feat_col1, feat_col2, feat_col3 = st.columns(3)
+
+with feat_col1:
+    st.markdown("#### 📚 Pattern Management")
+    st.markdown("""
+    - 🔍 **Pattern Browser** - 18+ patterns with filters
+    - ⚖️ **Comparison Tool** - Compare 2-3 patterns
+    - ⭐ **Ratings & Notes** - Document experience
+    - 📚 **Batch Processor** - AI-powered PDF extraction
+    """)
+    
+with feat_col2:
+    st.markdown("#### 🧵 Yarn & Inventory")
+    st.markdown("""
+    - 🧵 **Yarn Inventory** - Track your stash
+    - 💰 **Price Tracker** - Monitor sales & trends
+    - 🌡️ **Smart Matching** - Temperature-aware
+    - 📊 **Statistics** - Analyze your collection
+    """)
+
+with feat_col3:
+    st.markdown("#### 📝 Project Tracking")
+    st.markdown("""
+    - 📝 **Project Tracker** - Track WIP & completed
+    - 📸 **Photo Gallery** - Showcase projects
+    - ⏱️ **Time Logging** - Track hours & progress
+    - 💡 **Tips Archive** - Save modifications
+    """)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
 # CTA Section
 st.markdown("""
 <div style="background:#F0F2F6; padding:2rem; border-radius:12px; text-align:center;">
     <h2>Ready to Start Your Next Project?</h2>
-    <p>Join crafters using Tangled to find the perfect patterns and yarns</p>
+    <p>All-in-one platform for crochet pattern planning, yarn management, and project tracking</p>
     <br>
-    <a href="/Pattern_Browser" target="_self">
+    <a href="/1__Pattern_Browser" target="_self">
         <button style="background:#E8819C; color:white; border:none; padding:15px 40px; border-radius:8px; cursor:pointer; font-size:1.2rem;">
             🧶 Start Now
         </button>
