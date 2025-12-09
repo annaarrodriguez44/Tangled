@@ -117,59 +117,6 @@ with col4:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Features Section
-st.markdown("## ✨ What Can You Do?")
-st.markdown("<br>", unsafe_allow_html=True)
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown("""
-    <div class="feature-box">
-        <div class="feature-icon">🔍</div>
-        <div class="feature-title">Browse & Compare Patterns</div>
-        <p>18+ patterns with advanced filters. Compare patterns side-by-side and save favorites.</p>
-        <br>
-        <a href="/1__Pattern_Browser" target="_self">
-            <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
-                Start Browsing →
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("""
-    <div class="feature-box">
-        <div class="feature-icon">🧵</div>
-        <div class="feature-title">Yarn & Project Tracking</div>
-        <p>Track your stash, monitor prices, and manage WIP projects with progress updates.</p>
-        <br>
-        <a href="/3_🧵_Yarn_Inventory" target="_self">
-            <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
-                Track Stash →
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col3:
-    st.markdown("""
-    <div class="feature-box">
-        <div class="feature-icon">📸</div>
-        <div class="feature-title">Gallery & Notes</div>
-        <p>Rate patterns, upload project photos, and document modifications for future reference.</p>
-        <br>
-        <a href="/6_📸_Photo_Gallery" target="_self">
-            <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
-                View Gallery →
-            </button>
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-
 # How It Works Section
 st.markdown("## 🎯 How It Works")
 st.markdown("<br>", unsafe_allow_html=True)
