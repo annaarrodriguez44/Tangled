@@ -249,8 +249,38 @@ else:
 difficulties = ["All"] + sorted(unique_patterns['Difficulty Level'].dropna().unique().tolist())
 selected_difficulty = st.sidebar.selectbox("Difficulty", difficulties)
 
-weights = ["All"] + sorted(unique_patterns['Yarn Weight'].dropna().unique().tolist())
-selected_weight = st.sidebar.selectbox("Yarn Weight", weights)
+yarn_weights = ["All"] + sorted(unique_patterns['Yarn Weight'].dropna().unique().tolist())
+selected_yarn_weight = st.sidebar.selectbox("Yarn Weight", yarn_weights)
+
+# Advanced Filters
+with st.sidebar.expander("🔧 Advanced Filters"):
+    # Season filter
+    season_filter = st.multiselect(
+        "Best Season",
+        ["Spring", "Summer", "Fall", "Winter"],
+        help="Filter by recommended season"
+    )
+    
+    # Project type filter
+    project_type = st.selectbox(
+        "Project Type",
+        ["All", "Clothing", "Home Decor", "Toys/Amigurumi", "Accessories"],
+        help="Filter by type of project"
+    )
+    
+    # Estimated time filter
+    time_estimate = st.selectbox(
+        "Time to Complete",
+        ["All", "Quick (< 5 hours)", "Weekend (5-20 hours)", "Week (20-40 hours)", "Long-term (40+ hours)"],
+        help="Estimated time to complete"
+    )
+    
+    # Color complexity
+    color_count = st.selectbox(
+        "Color Complexity",
+        ["All", "1 Color", "2-3 Colors", "4+ Colors"],
+        help="Number of colors needed"
+    )
 
 # Apply filters
 filtered_df = unique_patterns.copy()
@@ -262,8 +292,51 @@ if show_favorites_only and 'favorites' in st.session_state:
 if selected_difficulty != "All":
     filtered_df = filtered_df[filtered_df['Difficulty Level'] == selected_difficulty]
 
-if selected_weight != "All":
-    filtered_df = filtered_df[filtered_df['Yarn Weight'] == selected_weight]
+if selected_yarn_weight != "All":
+    filtered_df = filtered_df[filtered_df['Yarn Weight'] == selected_yarn_weight]
+
+# Advanced Filters Application
+if season_filter:
+    # Infer season from yarn composition and weight
+    # Cool yarns (cotton) = Summer/Spring, Warm yarns (wool) = Winter/Fall
+    season_mask = filtered_df['Recommended Yarn Composition'].str.contains('cotton|linen', case=False, na=False)
+    if "Summer" in season_filter or "Spring" in season_filter:
+        filtered_df = filtered_df[season_mask]
+    elif "Winter" in season_filter or "Fall" in season_filter:
+        filtered_df = filtered_df[~season_mask]
+
+if project_type != "All":
+    # Infer project type from pattern name/structure
+    type_patterns = {
+        "Clothing": r'top|shirt|sweater|cardigan|dress|pants|skirt|hat|scarf',
+        "Home Decor": r'blanket|cushion|pillow|basket|rug|coaster',
+        "Toys/Amigurumi": r'ami|toy|doll|animal|plush|bear|bunny',
+        "Accessories": r'bag|pouch|purse|keychain|headband|mitt'
+    }
+    if project_type in type_patterns:
+        pattern = type_patterns[project_type]
+        mask = filtered_df['Pattern Name'].str.contains(pattern, case=False, na=False) | \
+               filtered_df['Pattern Structure'].str.contains(pattern, case=False, na=False)
+        filtered_df = filtered_df[mask]
+
+if time_estimate != "All":
+    # Estimate based on difficulty and structure
+    if time_estimate == "Quick (< 5 hours)":
+        filtered_df = filtered_df[filtered_df['Difficulty Level'].isin(['Beginner', 'Easy'])]
+    elif time_estimate == "Weekend (5-20 hours)":
+        filtered_df = filtered_df[filtered_df['Difficulty Level'].isin(['Easy', 'Intermediate'])]
+    elif time_estimate == "Week (20-40 hours)":
+        filtered_df = filtered_df[filtered_df['Difficulty Level'] == 'Intermediate']
+    elif time_estimate == "Long-term (40+ hours)":
+        filtered_df = filtered_df[filtered_df['Difficulty Level'].isin(['Advanced', 'Expert'])]
+
+if color_count != "All":
+    # Infer from recommended colors if available
+    if "Recommended Colors" in filtered_df.columns:
+        if color_count == "1 Color":
+            mask = filtered_df['Recommended Colors'].str.contains(r'^\d+$', na=False) & \
+                   (filtered_df['Recommended Colors'].astype(str).str.extract(r'(\d+)', expand=False).astype(float) == 1)
+            filtered_df = filtered_df[mask | filtered_df['Recommended Colors'].isna()]
 
 if search_query:
     # Simple text search
