@@ -1,182 +1,223 @@
-# app.py
+"""
+Tangled - Crochet Pattern Planner
+Homepage
+"""
+
 import streamlit as st
-import pandas as pd
-import numpy as np
-import itertools
-import networkx as nx
-import plotly.express as px
-import plotly.graph_objects as go
+from PIL import Image
 
-st.set_page_config(page_title="Yarn Material Analysis", layout="wide")
+st.set_page_config(
+    page_title="Tangled - Crochet Pattern Planner",
+    page_icon="🧶",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-st.title("🧶 Yarn Material Pair Analysis Dashboard")
+# Hero Section
+st.markdown("""
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #E8819C 0%, #F4A8B8 100%);
+        padding: 3rem 2rem;
+        border-radius: 15px;
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;
+    }
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .feature-box {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        height: 100%;
+        transition: transform 0.3s;
+    }
+    .feature-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+    }
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    .feature-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .stat-box {
+        background: #F0F2F6;
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #E8819C;
+    }
+    .stat-label {
+        font-size: 1rem;
+        color: #666;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-# --- Upload Excel file ---
-st.sidebar.header("1️⃣ Load Excel File")
-uploaded = st.sidebar.file_uploader("Upload your Database_YARN.xlsx", type=["xlsx"])
+st.markdown("""
+<div class="hero-section">
+    <div class="hero-title">🧶 Tangled</div>
+    <div class="hero-subtitle">Your Smart Crochet Companion</div>
+    <p>Find patterns, match perfect yarns, and plan your next crochet project with AI-powered recommendations</p>
+</div>
+""", unsafe_allow_html=True)
 
-if uploaded is not None:
-    df = pd.read_excel(uploaded)
+# Stats Section
+col1, col2, col3, col4 = st.columns(4)
 
-    st.sidebar.success("File loaded successfully ✅")
+with col1:
+    st.markdown("""
+    <div class="stat-box">
+        <div class="stat-number">18+</div>
+        <div class="stat-label">Crochet Patterns</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # --- Select key columns ---
-    st.sidebar.header("2️⃣ Select column names")
-    all_cols = df.columns.tolist()
+with col2:
+    st.markdown("""
+    <div class="stat-box">
+        <div class="stat-number">102</div>
+        <div class="stat-label">Yarn Options</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    name_col = st.sidebar.selectbox("Name column", options=all_cols)
-    price_col = st.sidebar.selectbox("Price column", options=all_cols)
-    thickness_col = st.sidebar.selectbox("Thickness / Yarn weight column", options=[None] + all_cols)
-    color_col = st.sidebar.selectbox("Color column", options=[None] + all_cols)
+with col3:
+    st.markdown("""
+    <div class="stat-box">
+        <div class="stat-number">10+</div>
+        <div class="stat-label">Locations</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # composition columns (fibres)
-    st.sidebar.markdown("### Composition columns")
-    comp_cols = st.sidebar.multiselect("Select fibre/material columns", options=all_cols)
+with col4:
+    st.markdown("""
+    <div class="stat-box">
+        <div class="stat-number">AI</div>
+        <div class="stat-label">Powered Matching</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    if not comp_cols:
-        st.warning("Please select at least one composition column.")
-        st.stop()
+st.markdown("<br>", unsafe_allow_html=True)
 
-    # --- Prepare binary DataFrame (1 if fibre present) ---
-    df_binary = df[comp_cols].copy()
-    for c in comp_cols:
-        df_binary[c] = pd.to_numeric(df_binary[c], errors='coerce').fillna(0)
-        df_binary[c] = (df_binary[c] > 0).astype(int)
+# Features Section
+st.markdown("## ✨ What Can You Do?")
+st.markdown("<br>", unsafe_allow_html=True)
 
-    st.markdown("### Material presence table (1 = present)")
-    st.dataframe(df_binary.head(10))
+col1, col2, col3 = st.columns(3)
 
-    # ---------------------------
-    # Compute pair statistics
-    # ---------------------------
-    def compute_pair_stats(df, df_binary, comp_cols, price_col=None, thickness_col=None):
-        pair_rows = []
-        cols = df_binary.columns.tolist()
-        for a, b in itertools.combinations(cols, 2):
-            mask = (df_binary[a] == 1) & (df_binary[b] == 1)
-            cnt = int(mask.sum())
-            if cnt == 0:
-                pair_rows.append({
-                    "pair": f"{a} + {b}",
-                    "count": 0,
-                    "mean_price": np.nan,
-                    "median_thickness": np.nan
-                })
-                continue
-            mean_price = np.nan
-            median_th = np.nan
-            if price_col and price_col in df.columns:
-                mean_price = float(pd.to_numeric(df.loc[mask, price_col], errors='coerce').dropna().mean() or np.nan)
-            if thickness_col and thickness_col in df.columns:
-                median_th = float(pd.to_numeric(df.loc[mask, thickness_col], errors='coerce').dropna().median() or np.nan)
-            pair_rows.append({
-                "pair": f"{a} + {b}",
-                "count": cnt,
-                "mean_price": mean_price,
-                "median_thickness": median_th
-            })
-        pairs_df = pd.DataFrame(pair_rows).sort_values("count", ascending=False).reset_index(drop=True)
-        return pairs_df
+with col1:
+    st.markdown("""
+    <div class="feature-box">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Browse Patterns</div>
+        <p>Explore our curated collection of crochet patterns. Filter by difficulty, yarn weight, and style.</p>
+        <br>
+        <a href="/Pattern_Browser" target="_self">
+            <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
+                Start Browsing →
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # ---------------------------
-    # Show panels
-    # ---------------------------
-    st.markdown("## 📊 Material Pair Frequency & Stats")
-    pairs_df = compute_pair_stats(df, df_binary, comp_cols, price_col=price_col, thickness_col=thickness_col)
+with col2:
+    st.markdown("""
+    <div class="feature-box">
+        <div class="feature-icon">🌡️</div>
+        <div class="feature-title">Smart Yarn Matching</div>
+        <p>Get temperature-aware yarn recommendations based on your location and the season.</p>
+        <br>
+        <a href="/Pattern_Browser" target="_self">
+            <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
+                Find Yarns →
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-    cols = st.columns([2, 1])
-    with cols[0]:
-        st.write("Top pairs (by co-occurrence)")
-        st.dataframe(pairs_df.head(20).reset_index(drop=True))
+with col3:
+    st.markdown("""
+    <div class="feature-box">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Project Planning</div>
+        <p>Calculate costs, create shopping lists, and save your favorite patterns for later.</p>
+        <br>
+        <a href="/Pattern_Browser" target="_self">
+            <button style="background:#E8819C; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">
+                Plan Project →
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-        fig_bar = go.Figure()
-        topn = pairs_df.head(15)
-        fig_bar.add_trace(go.Bar(x=topn["pair"], y=topn["count"], name="count", marker_color="teal"))
-        fig_bar.update_layout(title="Top material pairs (count)", xaxis_tickangle=-45, height=420, margin=dict(t=40))
-        st.plotly_chart(fig_bar, use_container_width=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
 
-    with cols[1]:
-        st.write("Least frequent pairs (including zero)")
-        st.dataframe(pairs_df.tail(20).sort_values("count").reset_index(drop=True))
-        bottomn = pairs_df.tail(15).sort_values("count")
-        fig_bar2 = go.Figure()
-        fig_bar2.add_trace(go.Bar(x=bottomn["pair"], y=bottomn["count"], name="count", marker_color="lightgray"))
-        fig_bar2.update_layout(title="Least frequent material pairs", xaxis_tickangle=-45, height=420, margin=dict(t=40))
-        st.plotly_chart(fig_bar2, use_container_width=True)
+# How It Works Section
+st.markdown("## 🎯 How It Works")
+st.markdown("<br>", unsafe_allow_html=True)
 
-    # ---------------------------
-    # Pair detail section
-    # ---------------------------
-    st.markdown("## 🧮 Pair price / thickness comparison")
-    sel_pair = st.selectbox("Select a pair to inspect", options=pairs_df["pair"].tolist(), index=0)
-    if sel_pair:
-        a, b = [s.strip() for s in sel_pair.split("+")]
-        mask = (df_binary[a] == 1) & (df_binary[b] == 1)
-        sample = df.loc[mask].copy()
-        st.write(f"Products with {sel_pair}: {len(sample)}")
-        if not sample.empty:
-            cols_show = [c for c in [name_col, price_col, thickness_col, color_col] + comp_cols if c in sample.columns]
-            st.dataframe(sample[cols_show].head(50))
+col1, col2, col3, col4 = st.columns(4)
 
-            if price_col and thickness_col and price_col in sample.columns and thickness_col in sample.columns:
-                s = sample.copy()
-                s[price_col] = pd.to_numeric(s[price_col], errors='coerce')
-                s[thickness_col] = pd.to_numeric(s[thickness_col], errors='coerce')
-                fig = px.scatter(
-                    s,
-                    x=thickness_col,
-                    y=price_col,
-                    hover_data=[name_col, color_col] if name_col and color_col else [name_col],
-                    title=f"Price vs Thickness for {sel_pair}",
-                    color_discrete_sequence=["purple"]
-                )
-                st.plotly_chart(fig, use_container_width=True)
-            else:
-                st.info("Price or thickness column missing for scatter.")
+with col1:
+    st.markdown("### 1️⃣")
+    st.markdown("**Set Your Location**")
+    st.write("Tell us where you are to get temperature-based recommendations")
 
-    # ---------------------------
-    # Network visualization
-    # ---------------------------
-    st.markdown("## 🕸️ Material co-occurrence network")
-    G = nx.Graph()
-    for _, row in pairs_df.iterrows():
-        a, b = [s.strip() for s in row["pair"].split("+")]
-        cnt = int(row["count"])
-        if cnt > 0:
-            G.add_node(a, size=int(df_binary[a].sum()))
-            G.add_node(b, size=int(df_binary[b].sum()))
-            G.add_edge(a, b, weight=cnt)
+with col2:
+    st.markdown("### 2️⃣")
+    st.markdown("**Browse Patterns**")
+    st.write("Filter and search through our collection to find your perfect project")
 
-    if len(G.nodes) > 0:
-        pos = nx.spring_layout(G, seed=42, k=0.6)
-        edge_x, edge_y = [], []
-        for u, v in G.edges():
-            x0, y0 = pos[u]
-            x1, y1 = pos[v]
-            edge_x += [x0, x1, None]
-            edge_y += [y0, y1, None]
+with col3:
+    st.markdown("### 3️⃣")
+    st.markdown("**Get Recommendations**")
+    st.write("AI matches the best yarns for your pattern and local climate")
 
-        node_x, node_y, node_text, node_size = [], [], [], []
-        for n, data in G.nodes(data=True):
-            x, y = pos[n]
-            node_x.append(x)
-            node_y.append(y)
-            node_text.append(f"{n} ({int(data.get('size', 0))})")
-            node_size.append(max(8, int(data.get('size', 0)) * 3))
+with col4:
+    st.markdown("### 4️⃣")
+    st.markdown("**Start Creating**")
+    st.write("Download your pattern, get your shopping list, and start crocheting!")
 
-        edge_trace = go.Scatter(x=edge_x, y=edge_y, line=dict(width=1, color="#888"),
-                                hoverinfo="none", mode="lines")
-        node_trace = go.Scatter(x=node_x, y=node_y, mode="markers+text", hoverinfo="text",
-                                textposition="top center",
-                                marker=dict(showscale=False, color="skyblue", size=node_size, line_width=1),
-                                text=node_text)
+st.markdown("<br><br>", unsafe_allow_html=True)
 
-        fig_net = go.Figure(data=[edge_trace, node_trace],
-                            layout=go.Layout(title="Material co-occurrence network (edge weight = count)",
-                                             showlegend=False, hovermode="closest",
-                                             margin=dict(b=20, l=5, r=5, t=40)))
-        st.plotly_chart(fig_net, use_container_width=True)
-    else:
-        st.info("Not enough co-occurrence data to build network.")
-else:
-    st.info("👈 Upload your Excel file in the sidebar to start.")
+# CTA Section
+st.markdown("""
+<div style="background:#F0F2F6; padding:2rem; border-radius:12px; text-align:center;">
+    <h2>Ready to Start Your Next Project?</h2>
+    <p>Join crafters using Tangled to find the perfect patterns and yarns</p>
+    <br>
+    <a href="/Pattern_Browser" target="_self">
+        <button style="background:#E8819C; color:white; border:none; padding:15px 40px; border-radius:8px; cursor:pointer; font-size:1.2rem;">
+            🧶 Start Now
+        </button>
+    </a>
+</div>
+""", unsafe_allow_html=True)
+
+# Footer
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("---")
+st.markdown("""
+<div style='text-align: center; color: #666;'>
+    <p>🧶 Tangled - Smart Crochet Pattern Planner | Built with ❤️ for crochet enthusiasts</p>
+    <p>Temperature-aware recommendations • 18+ Patterns • 102 Yarns • AI-Powered</p>
+</div>
+""", unsafe_allow_html=True)
