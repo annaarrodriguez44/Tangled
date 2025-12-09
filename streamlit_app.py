@@ -223,11 +223,11 @@ with feat_col2:
     """)
 
 with feat_col3:
-    st.markdown("#### 📝 Project Tracking")
+    st.markdown("#### 📝 Project & Community")
     st.markdown("""
     - 📝 **Project Tracker** - Track WIP & completed
     - 📸 **Photo Gallery** - Showcase projects
-    - ⏱️ **Time Logging** - Track hours & progress
+    - 💬 **Community Forum** - Chat & share tips
     - 💡 **Tips Archive** - Save modifications
     """)
 
