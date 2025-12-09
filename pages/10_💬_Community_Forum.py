@@ -117,6 +117,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Add back to home button
+col1, col2 = st.columns([6, 1])
+with col2:
+    if st.button("🏠 Home"):
+        st.switch_page("streamlit_app.py")
+
 # Header
 st.title("💬 Community Forum")
 st.markdown("**Connect with fellow crocheters, share tips, and discuss patterns!**")

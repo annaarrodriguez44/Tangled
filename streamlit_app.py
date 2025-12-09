@@ -233,17 +233,51 @@ with feat_col3:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
+# Quick Access Section
+st.markdown("## 🚀 Quick Access to All Features")
+st.markdown("Click any card to go directly to that feature!")
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Row 1: Main features
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("🔍 **Pattern Browser**\n\nBrowse 18+ patterns with advanced filters", use_container_width=True, key="nav_browser"):
+        st.switch_page("pages/1__Pattern_Browser.py")
+    
+    if st.button("📝 **Project Tracker**\n\nTrack WIP projects with progress", use_container_width=True, key="nav_projects"):
+        st.switch_page("pages/4_📝_Project_Tracker.py")
+    
+    if st.button("💰 **Price Tracker**\n\nMonitor yarn prices & sales", use_container_width=True, key="nav_prices"):
+        st.switch_page("pages/8_💰_Price_Tracker.py")
+
+with col2:
+    if st.button("🧵 **Yarn Inventory**\n\nManage your yarn stash", use_container_width=True, key="nav_inventory"):
+        st.switch_page("pages/3_🧵_Yarn_Inventory.py")
+    
+    if st.button("📸 **Photo Gallery**\n\nShowcase finished projects", use_container_width=True, key="nav_gallery"):
+        st.switch_page("pages/6_📸_Photo_Gallery.py")
+    
+    if st.button("📚 **Add Patterns**\n\nBatch process PDFs with AI", use_container_width=True, key="nav_add"):
+        st.switch_page("pages/9_📚_Add_Patterns.py")
+
+with col3:
+    if st.button("⚖️ **Pattern Comparison**\n\nCompare patterns side-by-side", use_container_width=True, key="nav_compare"):
+        st.switch_page("pages/5_⚖️_Pattern_Comparison.py")
+    
+    if st.button("⭐ **Pattern Notes**\n\nRate patterns & add notes", use_container_width=True, key="nav_notes"):
+        st.switch_page("pages/7_⭐_Pattern_Notes.py")
+    
+    if st.button("💬 **Community Forum**\n\nChat & share with others", use_container_width=True, key="nav_forum"):
+        st.switch_page("pages/10_💬_Community_Forum.py")
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+
 # CTA Section
 st.markdown("""
 <div style="background:#F0F2F6; padding:2rem; border-radius:12px; text-align:center;">
     <h2>Ready to Start Your Next Project?</h2>
     <p>All-in-one platform for crochet pattern planning, yarn management, and project tracking</p>
-    <br>
-    <a href="/1__Pattern_Browser" target="_self">
-        <button style="background:#E8819C; color:white; border:none; padding:15px 40px; border-radius:8px; cursor:pointer; font-size:1.2rem;">
-            🧶 Start Now
-        </button>
-    </a>
 </div>
 """, unsafe_allow_html=True)
 

@@ -15,6 +15,12 @@ sys.path.append('.')
 
 from slice10_yarn_match import calculate_match_score, load_databases, normalize_yarn_weight
 
+# Add back to home button
+col1, col2 = st.columns([6, 1])
+with col2:
+    if st.button("🏠 Home"):
+        st.switch_page("streamlit_app.py")
+
 # Temperature-based location data (average temps in Celsius)
 LOCATION_TEMPS = {
     "Sweden (Stockholm)": {"winter": -3, "spring": 5, "summer": 18, "fall": 8},
