@@ -79,22 +79,39 @@ Return ONLY valid JSON with these exact field names.
 """
     
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
-        response = model.generate_content(prompt)
-        
-        # Parse JSON from response
+        import time
         import json
-        response_text = response.text.strip()
         
-        # Remove markdown code blocks if present
-        if response_text.startswith('```json'):
-            response_text = response_text[7:]
-        if response_text.startswith('```'):
-            response_text = response_text[3:]
-        if response_text.endswith('```'):
-            response_text = response_text[:-3]
+        # Try with retry logic for rate limits
+        max_retries = 3
+        retry_delay = 15  # seconds
         
-        return json.loads(response_text.strip())
+        for attempt in range(max_retries):
+            try:
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                response = model.generate_content(prompt)
+                
+                # Parse JSON from response
+                response_text = response.text.strip()
+                
+                # Remove markdown code blocks if present
+                if response_text.startswith('```json'):
+                    response_text = response_text[7:]
+                if response_text.startswith('```'):
+                    response_text = response_text[3:]
+                if response_text.endswith('```'):
+                    response_text = response_text[:-3]
+                
+                return json.loads(response_text.strip())
+            
+            except Exception as e:
+                error_msg = str(e)
+                if "429" in error_msg or "quota" in error_msg.lower():
+                    if attempt < max_retries - 1:
+                        time.sleep(retry_delay)
+                        retry_delay *= 2  # Exponential backoff
+                        continue
+                raise e
     
     except Exception as e:
         return {"error": str(e)}
