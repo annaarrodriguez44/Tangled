@@ -74,7 +74,7 @@ if patterns_df.empty:
     st.error("No patterns found in database. Please add patterns first!")
 else:
     # Pattern selection
-    pattern_names = sorted(patterns_df['Pattern_Name'].dropna().unique().tolist())
+    pattern_names = sorted(patterns_df['Pattern Name'].dropna().unique().tolist())
     
     st.subheader("Select Patterns to Compare")
     

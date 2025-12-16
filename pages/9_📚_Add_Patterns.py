@@ -88,7 +88,7 @@ Return ONLY valid JSON with these exact field names.
         
         for attempt in range(max_retries):
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-pro')
                 response = model.generate_content(prompt)
                 
                 # Parse JSON from response
