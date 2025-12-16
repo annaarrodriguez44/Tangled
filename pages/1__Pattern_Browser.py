@@ -257,28 +257,28 @@ with col_header1:
     )
 
 with col_header2:
-    # Try to get real-time weather
-    real_temp = get_real_time_weather(user_location)
-    
-    if real_temp is not None:
-        # Use real-time temperature
-        default_temp = real_temp
-        st.success(f"🌡️ Live: {real_temp}°C")
-        temp_source = "Real-time weather data"
+    if user_location == "Custom":
+        # Custom location - allow manual temperature input
+        current_temp = st.number_input(
+            "🌡️ Current Temp (°C)",
+            min_value=-20,
+            max_value=40,
+            value=15,
+            step=1,
+            help="Enter your current temperature"
+        )
     else:
-        # Fallback to seasonal average
-        default_temp = get_temp_for_location_and_season(user_location, current_season)
-        temp_source = f"Seasonal average for {current_season}"
-    
-    # Always allow user to adjust temperature
-    current_temp = st.number_input(
-        "🌡️ Adjust Temp (°C)",
-        min_value=-20,
-        max_value=40,
-        value=default_temp,
-        step=1,
-        help=f"Using: {temp_source}. You can adjust if needed."
-    )
+        # Try to get real-time weather for selected location
+        real_temp = get_real_time_weather(user_location)
+        
+        if real_temp is not None:
+            # Use real-time temperature
+            current_temp = real_temp
+            st.success(f"🌡️ Live: {real_temp}°C")
+        else:
+            # Fallback to seasonal average
+            current_temp = get_temp_for_location_and_season(user_location, current_season)
+            st.info(f"🌡️ {current_temp}°C ({current_season})")
 
 st.markdown(f"🌡️ **Temperature-based recommendations for {user_location}** | Current: **{current_temp}°C**")
 st.markdown("---")
