@@ -94,29 +94,34 @@ with tab1:
     if st.session_state.get('show_note_form', False):
         st.subheader("Add Pattern Note")
         
-        with st.form("add_note_form"):
-            note_pattern = st.selectbox("Pattern", available_patterns)
-            note_type = st.selectbox("Note Type", ["General", "Modification", "Yarn Substitution", "Hook Size Change", "Tip"])
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                note_text = st.text_area("Note*", placeholder="What do you want to remember about this pattern?")
-                hook_used = st.text_input("Hook Size Used", placeholder="e.g., 4.0mm")
-            
-            with col2:
-                yarn_sub = st.text_area("Yarn Substitution", placeholder="What yarn did you use instead?")
-                modifications = st.text_area("Modifications Made", placeholder="How did you change the pattern?")
-            
-            tips = st.text_area("Tips for Next Time", placeholder="What would you do differently?")
-            
-            col1, col2 = st.columns([1, 5])
-            
-            with col1:
-                submitted = st.form_submit_button("💾 Save Note")
-            
-            with col2:
-                if st.form_submit_button("❌ Cancel"):
+        if not available_patterns:
+            st.warning("No patterns found in database. Please add patterns first.")
+        else:
+            with st.form("add_note_form"):
+                note_pattern = st.selectbox("Pattern", available_patterns)
+                note_type = st.selectbox("Note Type", ["General", "Modification", "Yarn Substitution", "Hook Size Change", "Tip"])
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    note_text = st.text_area("Note*", placeholder="What do you want to remember about this pattern?")
+                    hook_used = st.text_input("Hook Size Used", placeholder="e.g., 4.0mm")
+                
+                with col2:
+                    yarn_sub = st.text_area("Yarn Substitution", placeholder="What yarn did you use instead?")
+                    modifications = st.text_area("Modifications Made", placeholder="How did you change the pattern?")
+                
+                tips = st.text_area("Tips for Next Time", placeholder="What would you do differently?")
+                
+                col1, col2 = st.columns([1, 5])
+                
+                with col1:
+                    submitted = st.form_submit_button("💾 Save Note")
+                
+                with col2:
+                    cancel = st.form_submit_button("❌ Cancel")
+                
+                if cancel:
                     st.session_state.show_note_form = False
                     st.rerun()
             

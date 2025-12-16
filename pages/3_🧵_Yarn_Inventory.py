@@ -32,6 +32,7 @@ def create_empty_inventory():
     return pd.DataFrame(columns=[
         'Yarn_Name', 'Brand', 'Color', 'Weight', 'Fiber_Content',
         'Quantity_Skeins', 'Grams_Per_Skein', 'Total_Grams',
+        'Needle_Hook_Size', 'Yarn_Thickness', 'Season',
         'Location', 'Purchase_Date', 'Purchase_Price', 'Notes', 'Date_Added'
     ])
 
@@ -59,7 +60,7 @@ with st.sidebar:
 if action == "View Inventory":
     st.header("📦 Your Yarn Stash")
     
-    # Filters
+    # Filters - First row
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -79,6 +80,42 @@ if action == "View Inventory":
     with col3:
         search_term = st.text_input("🔍 Search", placeholder="Search yarn name or color...")
     
+    # Filters - Second row
+    col4, col5, col6 = st.columns(3)
+    
+    with col4:
+        # Needle/Hook Size filter
+        if 'Needle_Hook_Size' in st.session_state.inventory_df.columns:
+            filter_hook = st.multiselect(
+                "Filter by Needle/Hook Size",
+                options=["All"] + sorted(st.session_state.inventory_df['Needle_Hook_Size'].dropna().unique().tolist()) if not st.session_state.inventory_df.empty else ["All"],
+                default=["All"]
+            )
+        else:
+            filter_hook = ["All"]
+    
+    with col5:
+        # Yarn Thickness filter (alternative to weight)
+        if 'Yarn_Thickness' in st.session_state.inventory_df.columns:
+            filter_thickness = st.multiselect(
+                "Filter by Yarn Thickness",
+                options=["All"] + sorted(st.session_state.inventory_df['Yarn_Thickness'].dropna().unique().tolist()) if not st.session_state.inventory_df.empty else ["All"],
+                default=["All"]
+            )
+        else:
+            filter_thickness = ["All"]
+    
+    with col6:
+        # Season filter
+        if 'Season' in st.session_state.inventory_df.columns:
+            filter_season = st.multiselect(
+                "Filter by Season",
+                options=["All"] + sorted(st.session_state.inventory_df['Season'].dropna().unique().tolist()) if not st.session_state.inventory_df.empty else ["All"],
+                default=["All"]
+            )
+        else:
+            filter_season = ["All"]
+    
     # Apply filters
     filtered_df = st.session_state.inventory_df.copy()
     
@@ -88,6 +125,15 @@ if action == "View Inventory":
         
         if "All" not in filter_brand and filter_brand:
             filtered_df = filtered_df[filtered_df['Brand'].isin(filter_brand)]
+        
+        if "All" not in filter_hook and filter_hook and 'Needle_Hook_Size' in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df['Needle_Hook_Size'].isin(filter_hook)]
+        
+        if "All" not in filter_thickness and filter_thickness and 'Yarn_Thickness' in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df['Yarn_Thickness'].isin(filter_thickness)]
+        
+        if "All" not in filter_season and filter_season and 'Season' in filtered_df.columns:
+            filtered_df = filtered_df[filtered_df['Season'].isin(filter_season)]
         
         if search_term:
             filtered_df = filtered_df[
@@ -131,8 +177,11 @@ elif action == "Add New Yarn":
             color = st.text_input("Color*", placeholder="e.g., Navy Blue")
             weight = st.selectbox("Yarn Weight*", ["Lace", "Fingering", "Sport", "DK", "Worsted", "Aran", "Bulky", "Super Bulky", "Jumbo"])
             fiber_content = st.text_input("Fiber Content*", placeholder="e.g., 50% Cotton, 50% Merino Wool")
+            needle_hook_size = st.text_input("Needle/Hook Size", placeholder="e.g., 3.5mm, 4mm")
+            yarn_thickness = st.selectbox("Yarn Thickness", ["Not specified", "Very Fine", "Fine", "Light", "Medium", "Bulky", "Super Bulky", "Jumbo"])
         
         with col2:
+            season = st.selectbox("Best Season", ["Not specified", "Spring", "Summer", "Fall", "Winter", "All Season"])
             quantity = st.number_input("Number of Skeins*", min_value=1, value=1, step=1)
             grams_per_skein = st.number_input("Grams per Skein*", min_value=1, value=50, step=10)
             location = st.text_input("Storage Location", placeholder="e.g., Blue bin, Bedroom closet")
@@ -153,6 +202,9 @@ elif action == "Add New Yarn":
                     'Weight': weight,
                     'Fiber_Content': fiber_content,
                     'Quantity_Skeins': quantity,
+                    'Needle_Hook_Size': needle_hook_size if needle_hook_size else "Not specified",
+                    'Yarn_Thickness': yarn_thickness,
+                    'Season': season,
                     'Grams_Per_Skein': grams_per_skein,
                     'Total_Grams': total_grams,
                     'Location': location,
