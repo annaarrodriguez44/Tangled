@@ -177,11 +177,11 @@ with tab2:
         
         with col1:
             if import_option == "From Yarn Database" and not yarn_db.empty:
-                yarn_names = sorted(yarn_db['Yarn Name'].dropna().unique().tolist())
+                yarn_names = sorted(yarn_db['Name of the product'].dropna().unique().tolist())
                 yarn_name = st.selectbox("Yarn Name*", yarn_names)
                 
                 # Auto-fill brand if available
-                selected_yarn_info = yarn_db[yarn_db['Yarn Name'] == yarn_name].iloc[0] if not yarn_db[yarn_db['Yarn Name'] == yarn_name].empty else None
+                selected_yarn_info = yarn_db[yarn_db['Name of the product'] == yarn_name].iloc[0] if not yarn_db[yarn_db['Name of the product'] == yarn_name].empty else None
                 default_brand = selected_yarn_info['Brand'] if selected_yarn_info is not None and 'Brand' in selected_yarn_info else ""
                 brand = st.text_input("Brand*", value=default_brand)
             else:
