@@ -8,6 +8,7 @@ import pandas as pd
 import chromadb
 from datetime import datetime
 import os
+import requests
 
 # Import your existing functions
 import sys
@@ -18,7 +19,21 @@ from slice10_yarn_match import calculate_match_score, load_databases, normalize_
 # Add navigation
 st.markdown('<a href="/" target="_self" style="text-decoration:none;"><button style="float:right; background:#E8819C; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🏠 Home</button></a>', unsafe_allow_html=True)
 
-# Temperature-based location data (average temps in Celsius)
+# City coordinates for weather API
+LOCATION_COORDS = {
+    "Sweden (Stockholm)": {"lat": 59.3293, "lon": 18.0686},
+    "Spain (Madrid)": {"lat": 40.4168, "lon": -3.7038},
+    "UK (London)": {"lat": 51.5074, "lon": -0.1278},
+    "USA (New York)": {"lat": 40.7128, "lon": -74.0060},
+    "Canada (Toronto)": {"lat": 43.6532, "lon": -79.3832},
+    "Australia (Sydney)": {"lat": -33.8688, "lon": 151.2093},
+    "Germany (Berlin)": {"lat": 52.5200, "lon": 13.4050},
+    "France (Paris)": {"lat": 48.8566, "lon": 2.3522},
+    "Italy (Rome)": {"lat": 41.9028, "lon": 12.4964},
+    "Netherlands (Amsterdam)": {"lat": 52.3676, "lon": 4.9041},
+}
+
+# Temperature-based location data (fallback if API fails)
 LOCATION_TEMPS = {
     "Sweden (Stockholm)": {"winter": -3, "spring": 5, "summer": 18, "fall": 8},
     "Spain (Madrid)": {"winter": 6, "spring": 14, "summer": 25, "fall": 15},
@@ -67,6 +82,29 @@ def get_current_season():
         return "summer"
     else:
         return "fall"
+
+@st.cache_data(ttl=1800)  # Cache for 30 minutes
+def get_real_time_weather(location):
+    """Fetch real-time temperature from OpenWeatherMap API"""
+    if location == "Custom" or location not in LOCATION_COORDS:
+        return None
+    
+    try:
+        coords = LOCATION_COORDS[location]
+        # Using OpenWeatherMap free API (no key needed for basic current weather)
+        url = f"https://api.open-meteo.com/v1/forecast?latitude={coords['lat']}&longitude={coords['lon']}&current_weather=true&temperature_unit=celsius"
+        
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            temp = data.get('current_weather', {}).get('temperature')
+            if temp is not None:
+                return round(temp)
+    except Exception as e:
+        # If API fails, return None to use fallback
+        return None
+    
+    return None
 
 def get_temp_for_location_and_season(location, season):
     """Get average temperature for location and season"""
@@ -219,17 +257,28 @@ with col_header1:
     )
 
 with col_header2:
-    if user_location == "Custom":
-        current_temp = st.number_input(
-            "Current Temp (°C)",
-            min_value=-20,
-            max_value=40,
-            value=15,
-            help="Enter your current temperature"
-        )
+    # Try to get real-time weather
+    real_temp = get_real_time_weather(user_location)
+    
+    if real_temp is not None:
+        # Use real-time temperature
+        default_temp = real_temp
+        st.success(f"🌡️ Live: {real_temp}°C")
+        temp_source = "Real-time weather data"
     else:
-        current_temp = get_temp_for_location_and_season(user_location, current_season)
-        st.metric("Current Temp", f"{current_temp}°C", delta=f"{current_season.title()}")
+        # Fallback to seasonal average
+        default_temp = get_temp_for_location_and_season(user_location, current_season)
+        temp_source = f"Seasonal average for {current_season}"
+    
+    # Always allow user to adjust temperature
+    current_temp = st.number_input(
+        "🌡️ Adjust Temp (°C)",
+        min_value=-20,
+        max_value=40,
+        value=default_temp,
+        step=1,
+        help=f"Using: {temp_source}. You can adjust if needed."
+    )
 
 st.markdown(f"🌡️ **Temperature-based recommendations for {user_location}** | Current: **{current_temp}°C**")
 st.markdown("---")
