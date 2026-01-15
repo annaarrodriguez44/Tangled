@@ -7,6 +7,9 @@ import streamlit as st
 import pandas as pd
 import os
 
+# Back to home navigation
+st.markdown('<a href="/" class="back-home">← Back to Home</a>', unsafe_allow_html=True)
+
 st.set_page_config(
     page_title="Pattern Comparison - Tangled",
     page_icon="⚖️",

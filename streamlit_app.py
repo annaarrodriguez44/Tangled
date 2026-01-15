@@ -10,13 +10,42 @@ st.set_page_config(
     page_title="Tangled - Crochet Pattern Planner",
     page_icon="🧶",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Hero Section
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@400;700&display=swap');
+    
+    /* Hide sidebar completely */
+    [data-testid="stSidebar"] {
+        display: none;
+    }
+    [data-testid="collapsedControl"] {
+        display: none;
+    }
+    
+    /* Back to home button */
+    .back-home {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: #E8819C;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        z-index: 999;
+        transition: all 0.3s;
+    }
+    .back-home:hover {
+        background: #d66b87;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+    }
     
     .hero-section {
         background: linear-gradient(135deg, #E8819C 0%, #F4A8B8 50%, #FFC4D6 100%);

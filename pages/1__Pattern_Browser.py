@@ -16,8 +16,8 @@ sys.path.append('.')
 
 from slice10_yarn_match import calculate_match_score, load_databases, normalize_yarn_weight
 
-# Add navigation
-st.markdown('<a href="/" target="_self" style="text-decoration:none;"><button style="float:right; background:#E8819C; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🏠 Home</button></a>', unsafe_allow_html=True)
+# Back to home navigation
+st.markdown('<a href="/" class="back-home">← Back to Home</a>', unsafe_allow_html=True)
 
 # City coordinates for weather API (300+ major world cities)
 LOCATION_COORDS = {

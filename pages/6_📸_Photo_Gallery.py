@@ -8,6 +8,9 @@ import pandas as pd
 import os
 from datetime import datetime
 from PIL import Image
+
+# Back to home navigation
+st.markdown('<a href="/" class="back-home">← Back to Home</a>', unsafe_allow_html=True)
 import io
 
 st.set_page_config(

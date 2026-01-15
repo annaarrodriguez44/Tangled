@@ -8,6 +8,9 @@ import pandas as pd
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
+
+# Back to home navigation
+st.markdown('<a href="/" class="back-home">← Back to Home</a>', unsafe_allow_html=True)
 import pdfplumber
 from datetime import datetime
 

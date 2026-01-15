@@ -8,6 +8,9 @@ import pandas as pd
 import os
 from datetime import datetime
 import plotly.express as px
+
+# Back to home navigation
+st.markdown('<a href="/" class="back-home">← Back to Home</a>', unsafe_allow_html=True)
 import plotly.graph_objects as go
 
 st.set_page_config(
