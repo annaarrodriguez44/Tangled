@@ -13,10 +13,32 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Hero Section
+# Hero Section with Crochet-themed Design
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Quicksand:wght@300;400;600;700&family=Nunito:wght@400;700;800&display=swap');
+    
+    /* Crochet-themed background pattern */
+    [data-testid="stAppViewContainer"] {
+        background-color: #FFF5F7;
+        background-image: 
+            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,129,156,.03) 35px, rgba(232,129,156,.03) 70px),
+            repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(244,168,184,.03) 35px, rgba(244,168,184,.03) 70px);
+    }
+    
+    /* Main content background */
+    [data-testid="stAppViewContainer"] > div:first-child {
+        background: transparent;
+    }
+    
+    /* Global typography */
+    html, body, [class*="css"] {
+        font-family: 'Quicksand', sans-serif !important;
+    }
+    
+    h1, h2, h3, .hero-title {
+        font-family: 'Comfortaa', cursive !important;
+    }
     
     /* Hide sidebar completely */
     [data-testid="stSidebar"] {
@@ -31,95 +53,121 @@ st.markdown("""
         position: fixed;
         top: 20px;
         left: 20px;
-        background: #E8819C;
+        background: linear-gradient(135deg, #E8819C, #F4A8B8);
         color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
+        padding: 12px 24px;
+        border-radius: 30px;
         text-decoration: none;
         font-size: 1.1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(232,129,156,0.4);
         z-index: 999;
-        transition: all 0.3s;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .back-home:hover {
-        background: #d66b87;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #d66b87, #E8819C);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(232,129,156,0.6);
     }
     
+    /* Animated hero section with yarn ball pattern */
     .hero-section {
-        background: linear-gradient(135deg, #E8819C 0%, #F4A8B8 50%, #FFC4D6 100%);
-        padding: 4rem 2rem;
-        border-radius: 20px;
+        background: linear-gradient(135deg, #FFE5EC 0%, #FFC4D6 25%, #F4A8B8 50%, #E8819C 75%, #D66B87 100%);
+        padding: 5rem 2rem;
+        border-radius: 30px;
         text-align: center;
         color: white;
-        margin-bottom: 2rem;
-        box-shadow: 0 10px 30px rgba(232, 129, 156, 0.3);
+        margin-bottom: 3rem;
+        box-shadow: 0 15px 50px rgba(232, 129, 156, 0.4);
         position: relative;
         overflow: hidden;
+        border: 3px solid rgba(255,255,255,0.3);
     }
+    
+    /* Floating yarn balls animation */
     .hero-section::before {
-        content: "🧶 ✂️ 🪡 🧵 🎀";
+        content: "🧶";
         position: absolute;
-        top: 10px;
-        left: 0;
-        right: 0;
-        font-size: 2rem;
-        opacity: 0.3;
-        letter-spacing: 3rem;
+        font-size: 3rem;
+        opacity: 0.15;
+        animation: float1 6s ease-in-out infinite;
+        top: 20%;
+        left: 10%;
     }
+    .hero-section::after {
+        content: "🧵";
+        position: absolute;
+        font-size: 2.5rem;
+        opacity: 0.15;
+        animation: float2 7s ease-in-out infinite;
+        top: 60%;
+        right: 15%;
+    }
+    
+    @keyframes float1 {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    @keyframes float2 {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(-10deg); }
+    }
+    
     .hero-title {
-        font-family: 'Pacifico', cursive;
-        font-size: 6rem;
-        font-weight: normal;
+        font-family: 'Comfortaa', cursive !important;
+        font-size: 7rem;
+        font-weight: 700;
         margin-bottom: 1rem;
-        text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
-        background: linear-gradient(45deg, #ffffff, #ffe5ec);
+        text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+        background: linear-gradient(45deg, #ffffff, #fff5f7, #ffe5ec);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        animation: pulse 3s ease-in-out infinite;
     }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+    }
+    
     .hero-subtitle {
-        font-family: 'Dancing Script', cursive;
-        font-size: 2rem;
+        font-family: 'Nunito', sans-serif;
+        font-size: 2.2rem;
         margin-bottom: 1.5rem;
         font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
-    .feature-box {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        height: 100%;
-        transition: transform 0.3s;
-    }
-    .feature-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
-    }
-    .feature-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-    .feature-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
+    
+    /* Enhanced stat boxes */
     .stat-box {
-        background: #F0F2F6;
-        padding: 1.5rem;
-        border-radius: 10px;
+        background: linear-gradient(135deg, #ffffff, #FFF5F7);
+        padding: 2rem;
+        border-radius: 20px;
         text-align: center;
+        border: 2px solid #FFE5EC;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(232,129,156,0.1);
+    }
+    .stat-box:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(232,129,156,0.3);
+        border-color: #E8819C;
     }
     .stat-number {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #E8819C;
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #E8819C, #F4A8B8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-family: 'Nunito', sans-serif;
     }
     .stat-label {
-        font-size: 1rem;
+        font-size: 1.1rem;
         color: #666;
+        font-weight: 600;
+        margin-top: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -217,41 +265,91 @@ st.markdown("## 🚀 Explore All Features")
 st.markdown("Click any card to start using that tool")
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Custom CSS for feature cards
+# Custom CSS for feature cards with enhanced design
 st.markdown("""
 <style>
     .feature-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-        border: 2px solid #f0f0f0;
+        background: linear-gradient(135deg, #ffffff, #FFF5F7);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(232,129,156,0.15);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid #FFE5EC;
         height: 100%;
         cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .feature-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(232,129,156,0.1) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    .feature-card:hover::before {
+        opacity: 1;
     }
     .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 12px rgba(232,129,156,0.3);
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 15px 40px rgba(232,129,156,0.4);
         border-color: #E8819C;
     }
     .feature-icon-big {
-        font-size: 3rem;
+        font-size: 3.5rem;
         text-align: center;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.4s;
+        filter: drop-shadow(0 4px 8px rgba(232,129,156,0.3));
+    }
+    .feature-card:hover .feature-icon-big {
+        transform: scale(1.2) rotate(5deg);
     }
     .feature-title-big {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: #333;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #D66B87;
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        font-family: 'Comfortaa', cursive;
     }
     .feature-desc {
         color: #666;
         text-align: center;
-        font-size: 0.95rem;
-        line-height: 1.5;
+        font-size: 1rem;
+        line-height: 1.7;
+        font-family: 'Quicksand', sans-serif;
+    }
+    
+    /* Section headers */
+    h2, h3 {
+        font-family: 'Comfortaa', cursive;
+        color: #D66B87;
+        font-weight: 700;
+    }
+    
+    /* CTA Section Enhancement */
+    .cta-section {
+        background: linear-gradient(135deg, #FFE5EC, #FFC4D6, #F4A8B8);
+        padding: 3rem;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(232,129,156,0.3);
+        border: 3px solid rgba(255,255,255,0.5);
+    }
+    .cta-section h2 {
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        font-size: 2.5rem;
+    }
+    .cta-section p {
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 600;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -375,7 +473,7 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 
 # CTA Section
 st.markdown("""
-<div style="background:#F0F2F6; padding:2rem; border-radius:12px; text-align:center;">
+<div class="cta-section">
     <h2>Ready to Start Your Next Project?</h2>
     <p>All-in-one platform for crochet pattern planning, yarn management, and project tracking</p>
 </div>
