@@ -16,7 +16,7 @@ st.set_page_config(
 # Hero Section with Crochet-themed Design
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Quicksand:wght@300;400;600;700&family=Nunito:wght@400;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Nunito:wght@400;700;800&display=swap');
     
     /* Crochet-themed background pattern */
     [data-testid="stAppViewContainer"] {
@@ -32,12 +32,12 @@ st.markdown("""
     }
     
     /* Global typography */
-    html, body, [class*="css"] {
-        font-family: 'Quicksand', sans-serif !important;
+    html, body, [class*="css"], p, div, span {
+        font-family: Georgia, serif !important;
     }
     
     h1, h2, h3, .hero-title {
-        font-family: 'Comfortaa', cursive !important;
+        font-family: 'Sacramento', cursive !important;
     }
     
     /* Hide sidebar completely */
@@ -114,9 +114,9 @@ st.markdown("""
     }
     
     .hero-title {
-        font-family: 'Comfortaa', cursive !important;
+        font-family: 'Sacramento', cursive !important;
         font-size: 7rem;
-        font-weight: 700;
+        font-weight: 400;
         margin-bottom: 1rem;
         text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
         background: linear-gradient(45deg, #ffffff, #fff5f7, #ffe5ec);
@@ -132,7 +132,7 @@ st.markdown("""
     }
     
     .hero-subtitle {
-        font-family: 'Nunito', sans-serif;
+        font-family: Georgia, serif;
         font-size: 2.2rem;
         margin-bottom: 1.5rem;
         font-weight: 600;
@@ -315,21 +315,21 @@ st.markdown("""
         color: #D66B87;
         text-align: center;
         margin-bottom: 1rem;
-        font-family: 'Comfortaa', cursive;
+        font-family: 'Sacramento', cursive;
     }
     .feature-desc {
         color: #666;
         text-align: center;
         font-size: 1rem;
         line-height: 1.7;
-        font-family: 'Quicksand', sans-serif;
+        font-family: Georgia, serif;
     }
     
     /* Section headers */
     h2, h3 {
-        font-family: 'Comfortaa', cursive;
+        font-family: 'Sacramento', cursive;
         color: #D66B87;
-        font-weight: 700;
+        font-weight: 400;
     }
     
     /* CTA Section Enhancement */

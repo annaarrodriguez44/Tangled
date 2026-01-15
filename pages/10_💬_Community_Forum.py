@@ -3,6 +3,31 @@ import pandas as pd
 from datetime import datetime
 import os
 
+# Crochet-themed styling
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Nunito:wght@400;700;800&display=swap');
+    
+    [data-testid="stAppViewContainer"] {
+        background-color: #FFF5F7;
+        background-image: 
+            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(232,129,156,.03) 35px, rgba(232,129,156,.03) 70px),
+            repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(244,168,184,.03) 35px, rgba(244,168,184,.03) 70px);
+    }
+    html, body, [class*="css"], p, div, span {
+        font-family: Georgia, serif !important;
+    }
+    h1, h2, h3 {
+        font-family: 'Sacramento', cursive !important;
+        color: #D66B87;
+    }
+    .stat-number { font-family: 'Nunito', sans-serif !important; }
+</style>
+""", unsafe_allow_html=True)
+
+# Back to home navigation
+st.markdown('<a href="/" class="back-home">← Back to Home</a>', unsafe_allow_html=True)
+
 st.set_page_config(page_title="Community Forum", page_icon="💬", layout="wide")
 
 # File to store comments
