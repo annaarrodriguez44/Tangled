@@ -42,10 +42,16 @@ st.markdown("""
     
     /* Hide sidebar completely */
     [data-testid="stSidebar"] {
-        display: none;
+        display: none !important;
     }
     [data-testid="collapsedControl"] {
-        display: none;
+        display: none !important;
+    }
+    button[kind="header"] {
+        display: none !important;
+    }
+    [data-testid="stSidebarCollapsedControl"] {
+        display: none !important;
     }
     
     /* Back to home button */

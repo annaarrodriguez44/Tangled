@@ -22,10 +22,16 @@ st.markdown("""
         font-family: Georgia, serif !important;
     }
     h1, h2, h3 {
-        font-family: 'Sacramento', cursive !important;
+        font-family: 'Great Vibes', cursive !important;
         color: #D66B87;
     }
     .stat-number { font-family: 'Nunito', sans-serif !important; }
+    
+    /* Hide sidebar completely */
+    [data-testid="stSidebar"] { display: none !important; }
+    [data-testid="collapsedControl"] { display: none !important; }
+    button[kind="header"] { display: none !important; }
+    [data-testid="stSidebarCollapsedControl"] { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
