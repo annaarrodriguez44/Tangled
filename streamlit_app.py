@@ -16,22 +16,45 @@ st.set_page_config(
 # Hero Section
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@400;700&display=swap');
+    
     .hero-section {
-        background: linear-gradient(135deg, #E8819C 0%, #F4A8B8 100%);
-        padding: 3rem 2rem;
-        border-radius: 15px;
+        background: linear-gradient(135deg, #E8819C 0%, #F4A8B8 50%, #FFC4D6 100%);
+        padding: 4rem 2rem;
+        border-radius: 20px;
         text-align: center;
         color: white;
         margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(232, 129, 156, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-section::before {
+        content: "🧶 ✂️ 🪡 🧵 🎀";
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        font-size: 2rem;
+        opacity: 0.3;
+        letter-spacing: 3rem;
     }
     .hero-title {
-        font-size: 3.5rem;
-        font-weight: bold;
+        font-family: 'Pacifico', cursive;
+        font-size: 6rem;
+        font-weight: normal;
         margin-bottom: 1rem;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        background: linear-gradient(45deg, #ffffff, #ffe5ec);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
     .hero-subtitle {
-        font-size: 1.5rem;
+        font-family: 'Dancing Script', cursive;
+        font-size: 2rem;
         margin-bottom: 1.5rem;
+        font-weight: 600;
     }
     .feature-box {
         background: white;
@@ -74,9 +97,24 @@ st.markdown("""
 
 st.markdown("""
 <div class="hero-section">
-    <div class="hero-title">🧶 Tangled</div>
-    <div class="hero-subtitle">Your Smart Crochet Companion</div>
-    <p>Find patterns, match perfect yarns, and plan your next crochet project with AI-powered recommendations</p>
+    <div class="hero-title">Tangled</div>
+    <div class="hero-subtitle">🧶 Your Smart Crochet Companion 🧶</div>
+    <p style="font-size: 1.2rem; margin-top: 1rem;">Find patterns, match perfect yarns, and plan your next crochet project<br>with AI-powered recommendations</p>
+</div>
+""", unsafe_allow_html=True)
+
+# Crochet Image Collage
+st.markdown("""
+<div style="text-align: center; margin: 2rem 0;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="font-size: 5rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">🧶</div>
+        <div style="font-size: 4rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">🧵</div>
+        <div style="font-size: 5rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">🪡</div>
+        <div style="font-size: 4rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">✂️</div>
+        <div style="font-size: 5rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">🎀</div>
+        <div style="font-size: 4rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">🧶</div>
+        <div style="font-size: 5rem; opacity: 0.8; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));">🪢</div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
