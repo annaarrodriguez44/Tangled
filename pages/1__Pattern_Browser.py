@@ -19,7 +19,7 @@ from slice10_yarn_match import calculate_match_score, load_databases, normalize_
 # Crochet-themed styling
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Nunito:wght@400;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700;800&display=swap');
     
     [data-testid="stAppViewContainer"] {
         background-color: #FFF5F7;

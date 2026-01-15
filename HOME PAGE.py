@@ -16,7 +16,7 @@ st.set_page_config(
 # Hero Section with Crochet-themed Design
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Nunito:wght@400;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700;800&display=swap');
     
     /* Crochet-themed background pattern */
     [data-testid="stAppViewContainer"] {
@@ -37,7 +37,7 @@ st.markdown("""
     }
     
     h1, h2, h3, .hero-title {
-        font-family: 'Sacramento', cursive !important;
+        font-family: 'Great Vibes', cursive !important;
     }
     
     /* Hide sidebar completely */
@@ -114,7 +114,7 @@ st.markdown("""
     }
     
     .hero-title {
-        font-family: 'Sacramento', cursive !important;
+        font-family: 'Great Vibes', cursive !important;
         font-size: 7rem;
         font-weight: 400;
         margin-bottom: 1rem;
@@ -327,7 +327,7 @@ st.markdown("""
     
     /* Section headers */
     h2, h3 {
-        font-family: 'Sacramento', cursive;
+        font-family: 'Great Vibes', cursive;
         color: #D66B87;
         font-weight: 400;
     }
